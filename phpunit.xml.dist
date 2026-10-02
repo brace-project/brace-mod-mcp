@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php" colors="true" cacheDirectory=".phpunit.cache">
+<phpunit bootstrap="vendor/autoload.php" colors="true" cacheDirectory=".phpunit.cache" failOnWarning="true" failOnRisky="true">
     <testsuites>
-        <testsuite name="CSV Entity Table">
+        <testsuite name="Brace MCP unit and middleware tests">
             <directory>test</directory>
         </testsuite>
     </testsuites>
