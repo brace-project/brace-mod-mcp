@@ -31,6 +31,7 @@ final class McpServer
      * kind ist tools, prompts, resources oder templates. Ressourcen werden zusätzlich
      * mit ihrer konkreten URI geprüft; Objekt-/Mandantenrechte bleiben im Anwendungsdienst.
      * Ohne authorize sind alle ausdrücklich registrierten Definitionen zugänglich.
+     * Moderne cachefähige Ergebnisse sind privat und unmittelbar veraltet (ttlMs=0).
      *
      * @param callable|null $authorize Request-lokale Rechteprüfung, keine Authentifizierung.
      * @param callable|null $onError Erhält interne Throwable für das Logging der Anwendung.
@@ -101,6 +102,14 @@ final class McpServer
             if ($modern) {
                 $result['resultType'] = 'complete';
                 $result['_meta'] = (object) [Protocol::META_SERVER => ['name' => $this->name, 'version' => $this->version]];
+                if (in_array($message->method, [
+                    'server/discover', 'tools/list', 'prompts/list',
+                    'resources/list', 'resources/templates/list', 'resources/read',
+                ], true)) {
+                    // Keine Wiederverwendung zwischen Benutzern oder Zusage unveränderter Daten.
+                    $result['cacheScope'] = 'private';
+                    $result['ttlMs'] = 0;
+                }
             }
             $response = new ProtocolResponse(['jsonrpc' => '2.0', 'id' => $id, 'result' => (object) $result]);
             $response->toJson();
