@@ -26,24 +26,24 @@ final class CachePolicyTest extends TestCase
             'resources/read' => ['uri' => 'config://app'],
         ];
         foreach ($methods as $method => $params) {
-            $result = $this->result($server, $method, $params, true);
+            $result = $this->rpcResult($server, $method, $params, true);
             self::assertSame('private', $result->cacheScope, $method);
             self::assertSame(0, $result->ttlMs, $method);
             self::assertSame('complete', $result->resultType, $method);
             if ($method !== 'server/discover') {
-                $legacy = $this->result($server, $method, $params, false);
+                $legacy = $this->rpcResult($server, $method, $params, false);
                 self::assertFalse(property_exists($legacy, 'cacheScope'), $method);
                 self::assertFalse(property_exists($legacy, 'ttlMs'), $method);
             }
         }
         foreach (['tools/call' => ['name' => 'health'], 'prompts/get' => ['name' => 'hello'], 'ping' => []] as $method => $params) {
-            $result = $this->result($server, $method, $params, true);
+            $result = $this->rpcResult($server, $method, $params, true);
             self::assertFalse(property_exists($result, 'cacheScope'), $method);
             self::assertFalse(property_exists($result, 'ttlMs'), $method);
         }
     }
 
-    private function result(McpServer $server, string $method, array $params, bool $modern): \stdClass
+    private function rpcResult(McpServer $server, string $method, array $params, bool $modern): \stdClass
     {
         if ($modern) {
             $params['_meta'] = [
