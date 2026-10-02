@@ -1,0 +1,4 @@
+# Apache DocumentRoot: examples/public; requires mod_rewrite and AllowOverride FileInfo.
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [QSA,L]

@@ -1,37 +1,40 @@
 {
-  "name": "phore/project",
-  "type": "library",
-  "description": "",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Matthias Leuffen",
-      "email": "leuffen@continue.de"
-    }
-  ],
-  "autoload": {
-    "psr-4": {
-      "Phore\\FileSystem\\": "src/"
+    "name": "brace/mod-mcp",
+    "type": "library",
+    "description": "MCP tools, prompts and resources for Brace and PSR-15 applications, powered by Phore Schema",
+    "license": "MIT",
+    "authors": [
+        {"name": "Matthias Leuffen", "email": "leuffen@continue.de"}
+    ],
+    "require": {
+        "php": ">=8.3",
+        "ext-json": "*",
+        "brace/core": "dev-main",
+        "phore/schema": "dev-main",
+        "nyholm/psr7": "^1.8",
+        "opis/json-schema": "^2.4",
+        "psr/http-factory": "^1.1",
+        "psr/http-server-middleware": "^1.0"
     },
-    "files": [
-      "src/functions.php"
-    ]
-  },
-  "require": {
-    "php" : ">=8.3",
-    "ext-yaml": "*",
-    "ext-json": "*"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^13.2.2"
-  },
-  "suggest": {
-  },
-  "config": {
-    "preferred-install": "source",
-    "allow-plugins": {
-      "php-http/discovery": false
-    }
-  },
-  "minimum-stability": "dev"
+    "require-dev": {
+        "phpunit/phpunit": "^11.5",
+        "brace/mod-router": "dev-main",
+        "brace/mod-request-laminas": "dev-main"
+    },
+    "autoload": {"psr-4": {"Brace\\Mcp\\": "src/"}},
+    "autoload-dev": {"psr-4": {"Brace\\Mcp\\Tests\\": "test/"}},
+    "scripts": {
+        "test": "phpunit",
+        "lint": "find src test examples -name '*.php' -print0 | xargs -0 -n1 php -l",
+        "examples": [
+            "php examples/01-first-tool.php",
+            "php examples/03-attributes.php",
+            "php examples/04-custom-schema.php",
+            "php examples/05-providers-and-completion.php",
+            "php examples/06-shared-api.php"
+        ]
+    },
+    "config": {"preferred-install": "dist", "allow-plugins": {"php-http/discovery": false}},
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
